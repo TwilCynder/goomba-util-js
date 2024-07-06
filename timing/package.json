@@ -1,0 +1,15 @@
+{
+  "name": "timing-util",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gitlab.com/TwilCynder/goomba-util-js"
+  },
+  "author": "TwilCynder",
+  "license": "ISC"
+}
