@@ -1,0 +1,14 @@
+{
+  "name": "goomba_utility",
+  "version": "0.0.1",
+  "description": "Various functions that can be useful in nearly any node JS program. Currently in alpha, somehow.",
+  "main": "gutility.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "utility"
+  ],
+  "author": "TwilCydner",
+  "license": "ISC"
+}
