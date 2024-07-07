@@ -63,7 +63,7 @@ export class TimeoutAnimation extends TAnimation {
  * @returns 
  */
 export function animate(func){
-    let tm = new TimingManager;
+    let tm = new TAnimation;
     
     (async () => {
         try {
@@ -73,9 +73,7 @@ export function animate(func){
                 throw err;
             }
             //Animation stopped using tm.stop();
-            console.log("Stopped");
         }
-        console.log("Fini")
     })();
 
     return tm;

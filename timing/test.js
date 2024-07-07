@@ -1,9 +1,8 @@
-import { TimeoutAnimation } from "./Animation.mjs";
+import { animate } from "./Animation.js";
 
-let a = new TimeoutAnimation(1000);
-
-a.run();
-
-setTimeout(() => {
-    a.stop();
-}, 6200);
+animate(async tm => {
+    for (let i = 0; i < 10; i++){
+        console.log(i);
+        await tm.delay(500);
+    }
+});
