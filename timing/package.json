@@ -1,6 +1,6 @@
 {
-  "name": "timing-util",
-  "version": "1.0.0",
+  "name": "@twilcynder/timing-util",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -11,5 +11,6 @@
     "url": "gitlab.com/TwilCynder/goomba-util-js"
   },
   "author": "TwilCynder",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }
