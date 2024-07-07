@@ -1,8 +1,10 @@
 import { animate } from "./Animation.js";
 
 animate(async tm => {
-    for (let i = 0; i < 10; i++){
-        console.log(i);
-        await tm.delay(500);
+    while (true){
+        console.log("red")
+        await tm.delay(1000);
+        console.log("black");
+        await tm.delay(1000);
     }
-});
+})

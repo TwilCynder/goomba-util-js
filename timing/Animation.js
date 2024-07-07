@@ -1,3 +1,7 @@
+class StopException {
+
+}
+
 export class TAnimation {
     #stopped = false;
 
