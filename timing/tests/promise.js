@@ -1,12 +1,12 @@
 import { animate } from "../Animation.js";
 
 export async function testPromise(){
-    let tm = animate(async tm => {
+    let tm = animate(async manager => {
         for (let i = 0; i < 8; i++){
             console.log("Oui", i);
-            await tm.sleep(500)
+            await manager.sleep(500)
             console.log("Non", i);
-            await tm.sleep(500);
+            await manager.sleep(500);
         }
     })
 

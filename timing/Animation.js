@@ -2,7 +2,7 @@ class StopException {
 
 }
 
-class TAnimation {
+class TimingController {
     #running = false;
     #stopped = false;
 
@@ -40,7 +40,7 @@ class TAnimation {
     }
 }
 
-export class TimeoutAnimation extends TAnimation {
+export class TimeoutAnimation extends TimingController {
     #timeout;
     #delay;
     
@@ -133,7 +133,7 @@ export class TimedExectionController {
         }
 
         let resolve_;
-        let tm = new TAnimation;
+        let tm = new TimingController;
         this.promise = new Promise((resolve, reject) => {
             resolve_ = resolve;
 
@@ -166,7 +166,7 @@ export class TimedExectionController {
 }
 
 /**
- * @param {(tm: TimedExectionController) => Promise<any>} func 
+ * @param {(tm: TimingController) => Promise<any>} func 
  * @returns 
  */
 export function animate(func){
