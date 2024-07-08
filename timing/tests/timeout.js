@@ -7,17 +7,24 @@ class TimeoutAnimTest extends TimeoutAnimation {
         super(400)
     }
 
-    loop(){
+    async loop(){
         this.#count++;
         if (this.#count > 10){
             return true;
         }
         console.log("Oui");
+        await this.sleep(1000);
     }
 }
 
 export async function testTimeout(){
-    await new TimeoutAnimTest().run();
+    let anim = new TimeoutAnimTest();
+
+    setTimeout(() => {
+        anim.stop();
+    }, 1900);
+
+    await anim.run();
 
     console.log("THE END (of my suffering)")
 }

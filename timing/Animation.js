@@ -23,9 +23,14 @@ class TAnimation {
         return this.#running;
     }
 
-    delay(ms){
+    sleep(ms){
         let self = this; //this 
         return new Promise((resolve, reject) => {
+            if (self.isStopped()){
+                console.log("reject 1")
+                reject(new StopException);
+            }
+
             setTimeout(() => {
                 self.isStopped() ?
                     reject(new StopException) :
@@ -51,18 +56,18 @@ export class TimeoutAnimation extends TAnimation {
         this.#delay = delay;
     }
 
-    loop(){
+    async loop(){
         console.log(this)
         //Overload this !
     }
 
-    #runLoop(){
+    async #runLoop(){
         if (this.isStopped()) return;
 
         this.#timeout = undefined;
 
         try {
-            let res = this.loop();
+            let res = await this.loop();
 
             if (res){
                 this.#stop_();
@@ -74,7 +79,12 @@ export class TimeoutAnimation extends TAnimation {
                 this.#timeout = setTimeout(this.#runLoop.bind(this), this.#delay);
             }
         } catch (err){
-            this.#rejectFunction(err);
+            if (err instanceof StopException){
+                this.#resolveFunction() 
+            } else {
+                this.#rejectFunction(err);
+            }
+
         }
     }
 
