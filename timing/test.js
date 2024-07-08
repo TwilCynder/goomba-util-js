@@ -1,3 +1,4 @@
+import { testPromise } from "./tests/promise.js";
 import { testTimeout } from "./tests/timeout.js";
 
-await testTimeout();
+await testPromise();

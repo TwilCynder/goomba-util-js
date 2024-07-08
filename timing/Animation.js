@@ -47,6 +47,9 @@ export class TimeoutAnimation extends TAnimation {
     #resolveFunction;
     #rejectFunction;
 
+    /** @type {Promise<void>} */
+    promise;
+
     constructor(delay){
         super();
         this.setDelay(delay);
@@ -84,7 +87,6 @@ export class TimeoutAnimation extends TAnimation {
             } else {
                 this.#rejectFunction(err);
             }
-
         }
     }
 
@@ -95,6 +97,8 @@ export class TimeoutAnimation extends TAnimation {
             this.#resolveFunction = resolve;
             this.#rejectFunction = reject;
         })
+
+        this.promise = p;
 
         this.#runLoop();
 
@@ -117,23 +121,92 @@ export class TimeoutAnimation extends TAnimation {
     }
 }
 
+export class AsyncExectionController extends TAnimation {
+    #resolve;
+    #reject;
+
+    /** @type {Promise<void>} */
+    promise;
+
+    constructor(func){
+        super()
+
+        this.promise = new Promise((resolve, reject) => {
+            this.#resolve = resolve;
+            this.#reject = reject;
+        });
+
+        (async () => {
+            try {
+                await func(this)
+            } catch (err){
+                if (!(err instanceof StopException)){
+                    this.#reject(err);
+                }
+            }
+
+            if (this.isStopped()) return;
+            this.#resolve();
+        })()
+            
+        this.run();
+    }
+
+    stop(){
+        if (this.isStopped() || !this.isRunning()) return;
+        super.stop();
+        this.#resolve()
+    }
+}
+
+export class TimedExectionController {
+    #resolve;
+    #tm;
+    /**@type {Promise<void>} */
+    promise;
+
+    constructor(func){
+        if (!(func instanceof Function)){
+            throw "TimedExecutionController : argument is not a function"; 
+        }
+
+        let resolve_;
+        let tm = new TAnimation;
+        this.promise = new Promise((resolve, reject) => {
+            resolve_ = resolve;
+
+            (async () => {
+                try {
+                    tm.run();
+                    await func(tm);
+                } catch (err){
+                    if (!(err instanceof StopException)){
+                        reject(err);
+                    }
+                }
+    
+                if (tm.isStopped()) return;
+                resolve();
+            })()
+
+            return (()=>{})(resolve, reject) //WHAT THE FUCK
+        })
+        this.#resolve = resolve_;
+        this.#tm = tm;
+    }
+
+    stop(){
+        let tm = this.#tm;
+        if (tm.isStopped() || !tm.isRunning()) return;
+        tm.stop();
+        this.#resolve();
+    }
+}
+
 /**
- * @param {(tm: TAnimation) => Promise<any>} func 
+ * @param {(tm: TimedExectionController) => Promise<any>} func 
  * @returns 
  */
 export function animate(func){
-    let tm = new TAnimation;
-    
-    (async () => {
-        try {
-            await func(tm)
-        } catch (err){
-            if (!(err instanceof StopException)){
-                throw err;
-            }
-            //Animation stopped using tm.stop();
-        }
-    })();
-
-    return tm;
+    return new TimedExectionController(func);
 }
