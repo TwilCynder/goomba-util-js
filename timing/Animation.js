@@ -121,44 +121,6 @@ export class TimeoutAnimation extends TAnimation {
     }
 }
 
-export class AsyncExectionController extends TAnimation {
-    #resolve;
-    #reject;
-
-    /** @type {Promise<void>} */
-    promise;
-
-    constructor(func){
-        super()
-
-        this.promise = new Promise((resolve, reject) => {
-            this.#resolve = resolve;
-            this.#reject = reject;
-        });
-
-        (async () => {
-            try {
-                await func(this)
-            } catch (err){
-                if (!(err instanceof StopException)){
-                    this.#reject(err);
-                }
-            }
-
-            if (this.isStopped()) return;
-            this.#resolve();
-        })()
-            
-        this.run();
-    }
-
-    stop(){
-        if (this.isStopped() || !this.isRunning()) return;
-        super.stop();
-        this.#resolve()
-    }
-}
-
 export class TimedExectionController {
     #resolve;
     #tm;
